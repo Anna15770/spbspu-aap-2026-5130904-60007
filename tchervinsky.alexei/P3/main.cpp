@@ -2,6 +2,7 @@
 #include <sstream>
 #include <fstream>
 #include <cstdlib>
+#include <string>
 
 const int ARGC_MIN = 4;
 
@@ -22,7 +23,7 @@ int main(int argc, char *argv[])
   int num{0};
   ss_num >> num;
   std::streambuf *pbuf = ss_num.rdbuf();
-  std::streamsize ss_num_avail = pbuf->in_avail();
+  const std::streamsize ss_num_avail = pbuf->in_avail();
   if (!ss_num || ss_num_avail != 0)
   {
     std::cerr << "First parameter is not a number\n";
