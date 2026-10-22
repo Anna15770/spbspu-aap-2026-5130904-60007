@@ -8,7 +8,7 @@ const int NUM_STATIC = 1;
 const int NUM_DYNAMIC = 2;
 const std::size_t MAX_NUMBER_OF_ELEMENTS = 10000;
 
-bool readMatrix(std::ifstream &file, std::size_t rows, std::size_t cols, int *const matrix)
+bool readMatrix(std::ifstream &file, std::size_t rows, std::size_t cols, int *const matrix)     // NOLINT(readability-non-const-parameter)
 {
   for (std::size_t i = 0; i < rows; i++)
   {
@@ -21,7 +21,6 @@ bool readMatrix(std::ifstream &file, std::size_t rows, std::size_t cols, int *co
       }
     }
   }
-  file.close();
   return true;
 }
 
