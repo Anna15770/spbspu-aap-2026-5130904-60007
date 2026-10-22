@@ -2,7 +2,7 @@
 #include <fstream>
 #include <string>
 #include <cstddef>
-#include <stdexcept>
+#include <exception>
 
 namespace baskakov {
   constexpr int expected_argc = 4;
