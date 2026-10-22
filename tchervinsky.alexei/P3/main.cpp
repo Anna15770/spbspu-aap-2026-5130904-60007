@@ -2,10 +2,8 @@
 #include <fstream>
 
 // 1. Функция для выделения памяти и чтения цельного массива из файла
-int* readMatrix(const char* filename, int rows, int cols) {
-    // Выделяем ОДИН сплошной блок памяти на rows * cols элементов
-    int* matrix = new int[rows * cols];
-
+int* readMatrix(const char* filename, int rows, int cols, int *matrix)
+{
     std::ifstream file(filename);
     if (!file.is_open()) {
         std::cerr << "Ошибка: не удалось открыть файл " << filename << std::endl;
@@ -82,15 +80,22 @@ int main() {
     const int ROWS = 2;
     const int COLS = 3;
 
+    int rows = ROWS;
+    int cols = ROWS;
+
+    // Выделяем ОДИН сплошной блок памяти на rows * cols элементов
+    int matrix[ROWS * COLS]{0}; // num 1 (static)
+    // int* matrix = new int[rows * cols]; // num 2 (dynamic)
+
+
     // Вызываем функции по цепочке
-    int* matrix = readMatrix("input.txt", ROWS, COLS);
-    if (matrix == nullptr) return 1;
+    int* matrix_ret = readMatrix("input.txt", ROWS, COLS, matrix);
 
     printMatrix(matrix, ROWS, COLS);
 
     int totalSaddle = countSaddleElements(matrix, ROWS, COLS);
     std::cout << "Всего седловых элементов: " << totalSaddle << std::endl;
 
-    freeMatrix(matrix);
+    // freeMatrix(matrix);
     return 0;
 }
