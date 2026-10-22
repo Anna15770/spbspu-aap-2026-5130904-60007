@@ -2,14 +2,13 @@
 #include <fstream>
 #include <sstream>
 #include <cstdlib>
-#include <string>
 
 const int ARGC_EXACT = 4;
 const int NUM_STATIC = 1;
 const int NUM_DYNAMIC = 2;
 const std::size_t MAX_NUMBER_OF_ELEMENTS = 10000;
 
-bool readMatrix(std::ifstream &file, std::size_t rows, std::size_t cols, int *matrix)
+bool readMatrix(std::ifstream &file, std::size_t rows, std::size_t cols, int *const matrix)
 {
   for (std::size_t i = 0; i < rows; i++)
   {
@@ -47,15 +46,15 @@ std::size_t countSaddleElements(const int *matrix, std::size_t rows, std::size_t
   {
     for (std::size_t j = 0; j < cols; j++)
     {
-      int current = *(matrix + i * cols + j);
-      bool isMinInRow = true;
-      bool isMaxInCol = true;
+      const int current = *(matrix + i * cols + j);
+      bool is_min_in_row = true;
+      bool is_max_in_col = true;
 
       for (std::size_t k = 0; k < cols; k++)
       {
         if (*(matrix + i * cols + k) < current)
         {
-          isMinInRow = false;
+          is_min_in_row = false;
           break;
         }
       }
@@ -64,12 +63,12 @@ std::size_t countSaddleElements(const int *matrix, std::size_t rows, std::size_t
       {
         if (*(matrix + k * cols + j) > current)
         {
-          isMaxInCol = false;
+          is_max_in_col = false;
           break;
         }
       }
 
-      if (isMinInRow && isMaxInCol)
+      if (is_min_in_row && is_max_in_col)
       {
         count++;
       }
@@ -78,7 +77,7 @@ std::size_t countSaddleElements(const int *matrix, std::size_t rows, std::size_t
   return count;
 }
 
-void freeMatrix(int *matrix)
+void freeMatrix(const int *matrix)
 {
   delete[] matrix;
 }
@@ -127,7 +126,7 @@ int main(int argc, char *argv[])
     return 1;
   }
 
-  std::size_t rows;
+  std::size_t rows{0};
   ifs >> rows;
   if (!ifs)
   {
@@ -135,7 +134,7 @@ int main(int argc, char *argv[])
     return 2;
   }
 
-  std::size_t cols;
+  std::size_t cols{0};
   ifs >> cols;
   if (!ifs)
   {
@@ -167,9 +166,9 @@ int main(int argc, char *argv[])
 
   ifs.close();
 
-  std::size_t totalSaddle = countSaddleElements(arr, rows, cols);
+  const std::size_t total_saddle = countSaddleElements(arr, rows, cols);
 
-  ofs << totalSaddle << std::endl;
+  ofs << total_saddle << std::endl;
   ofs.close();
 
   if (num == NUM_DYNAMIC)
