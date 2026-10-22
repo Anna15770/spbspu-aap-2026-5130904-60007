@@ -2,65 +2,67 @@
 #include <fstream>
 #include <string>
 #include <cstddef>
+#include <stdexcept>
 
 namespace baskakov {
   constexpr int expected_argc = 4;
   constexpr int err_args = 1;
   constexpr int err_data = 2;
-  constexpr std::size_t max_stack_size = 10000;
+  constexpr int max_stack_size = 10000;
 
-  enum class ParamStatus {
+  enum class ParamStatus
+  {
     Success = 0,
     NotANumber,
     OutOfRange
   };
 
-  ParamStatus checkFirstParam(const char* firstParam)
+  ParamStatus checkFirstParam(const char* first_param)
   {
     try {
-      std::size_t charNum = 0;
-      const std::string argStr(firstParam);
-      const int value = std::stoi(argStr, &charNum);
-      if (argStr.length() != charNum) {
+      std::size_t char_num = 0;
+      const std::string arg_str(first_param);
+      const int value = std::stoi(arg_str, &char_num);
+      if (arg_str.length() != char_num) {
         return ParamStatus::NotANumber;
       }
       if (value != 1 && value != 2) {
         return ParamStatus::OutOfRange;
       }
       return ParamStatus::Success;
-    } catch (const std::invalid_argument &) {
+    } catch (const std::invalid_argument&) {
       return ParamStatus::NotANumber;
-    } catch (const std::out_of_range &) {
+    } catch (const std::out_of_range&) {
       return ParamStatus::OutOfRange;
     }
   }
 
-  int countSaddlePoints(const int* matrix, int rowsNum, int columnsNum)
+  int countSaddlePoints(const int* matrix, int rows_num, int columns_num)
   {
     int cnt = 0;
-    for (int i = 0; i < rowsNum; ++i) {
-      for (int j = 0; j < columnsNum; ++j) {
-        bool isMinInRow = true;
-        for (int k = 0; k < columnsNum; ++k) {
-          if (matrix[i * columnsNum + k] < matrix[i * columnsNum + j]) {
-            isMinInRow = false;
+    for (int i = 0; i < rows_num; ++i) {
+      for (int j = 0; j < columns_num; ++j) {
+        bool is_min_in_row = true;
+        for (int k = 0; k < columns_num; ++k) {
+          if (matrix[i * columns_num + k] < matrix[i * columns_num + j]) {
+            is_min_in_row = false;
             break;
           }
         }
 
-        if (!isMinInRow) {
+        if (!is_min_in_row) {
           continue;
         }
 
-        bool isMaxInCol = true;
-        for (int p = 0; p < rowsNum; ++p) {
-          if (matrix[p * columnsNum + j] > matrix[i * columnsNum + j]) {
-            isMaxInCol = false;
+        bool is_max_in_col = true;
+        for (int p = 0; p < rows_num; ++p) {
+          if (matrix[p * columns_num + j] > matrix[i * columns_num + j]) {
+            is_max_in_col = false;
             break;
           }
         }
 
-        if (isMaxInCol) {
+        if (is_max_in_col) {
           ++cnt;
         }
       }
@@ -96,14 +98,14 @@ int main(int argc, char* argv[])
     return baskakov::err_data;
   }
 
-  int rowsNum = 0;
-  int columnsNum = 0;
-  if (!(file >> rowsNum >> columnsNum)) {
+  int rows_num = 0;
+  int columns_num = 0;
+  if (!(file >> rows_num >> columns_num)) {
     std::cerr << "Invalid matrix dimensions\n";
     return baskakov::err_data;
   }
 
-  if (rowsNum < 0 || columnsNum < 0) {
+  if (rows_num < 0 || columns_num < 0) {
     std::cerr << "Dimensions cannot be negative\n";
     return baskakov::err_data;
   }
@@ -114,27 +116,27 @@ int main(int argc, char* argv[])
     return baskakov::err_data;
   }
 
-  const int total = rowsNum * columnsNum;
+  const int total = rows_num * columns_num;
   const int mode = std::stoi(argv[1]);
 
-  int stackMatrix[baskakov::max_stack_size];
-  int* dynamicMatrix = nullptr;
+  int stack_matrix[baskakov::max_stack_size];
+  int* dynamic_matrix = nullptr;
   int* matrix = nullptr;
 
   if (mode == 1) {
-    if (static_cast<std::size_t>(total) > baskakov::max_stack_size) {
+    if (total > baskakov::max_stack_size) {
       std::cerr << "Matrix exceeds max stack size\n";
       return baskakov::err_data;
     }
-    matrix = stackMatrix;
+    matrix = stack_matrix;
   } else {
-    dynamicMatrix = new int[total];
-    matrix = dynamicMatrix;
+    dynamic_matrix = new int[total];
+    matrix = dynamic_matrix;
   }
 
   for (int i = 0; i < total; ++i) {
     if (!(file >> matrix[i])) {
-      delete[] dynamicMatrix;
+      delete[] dynamic_matrix;
       std::cerr << "Invalid matrix data\n";
       return baskakov::err_data;
     }
@@ -142,13 +144,13 @@ int main(int argc, char* argv[])
 
   std::string extra;
   if (file >> extra) {
-    delete[] dynamicMatrix;
+    delete[] dynamic_matrix;
     std::cerr << "Extra data in file\n";
     return baskakov::err_data;
   }
 
-  const int cnt = baskakov::countSaddlePoints(matrix, rowsNum, columnsNum);
-  delete[] dynamicMatrix;
+  const int cnt = baskakov::countSaddlePoints(matrix, rows_num, columns_num);
+  delete[] dynamic_matrix;
 
   out << cnt << "\n";
   return 0;
