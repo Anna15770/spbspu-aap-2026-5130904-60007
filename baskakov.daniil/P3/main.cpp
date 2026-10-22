@@ -8,34 +8,9 @@ namespace baskakov {
   constexpr int expected_argc = 4;
   constexpr int err_args = 1;
   constexpr int err_data = 2;
+  constexpr int mode_stack = 1;
+  constexpr int mode_dynamic = 2;
   constexpr int max_stack_size = 10000;
-
-  enum class ParamStatus
-  {
-    Success = 0,
-    NotANumber,
-    OutOfRange
-  };
-
-  ParamStatus checkFirstParam(const char* first_param)
-  {
-    try {
-      std::size_t char_num = 0;
-      const std::string arg_str(first_param);
-      const int value = std::stoi(arg_str, &char_num);
-      if (arg_str.length() != char_num) {
-        return ParamStatus::NotANumber;
-      }
-      if (value != 1 && value != 2) {
-        return ParamStatus::OutOfRange;
-      }
-      return ParamStatus::Success;
-    } catch (const std::invalid_argument&) {
-      return ParamStatus::NotANumber;
-    } catch (const std::out_of_range&) {
-      return ParamStatus::OutOfRange;
-    }
-  }
 
   int countSaddlePoints(const int* matrix, int rows_num, int columns_num)
   {
@@ -82,12 +57,21 @@ int main(int argc, char* argv[])
     return baskakov::err_args;
   }
 
-  const baskakov::ParamStatus status = baskakov::checkFirstParam(argv[1]);
-  if (status == baskakov::ParamStatus::NotANumber) {
+  int mode = 0;
+  try {
+    std::size_t char_num = 0;
+    const std::string arg_str(argv[1]);
+    mode = std::stoi(arg_str, &char_num);
+    if (arg_str.length() != char_num) {
+      std::cerr << "First parameter is not a number\n";
+      return baskakov::err_args;
+    }
+  } catch (const std::exception&) {
     std::cerr << "First parameter is not a number\n";
     return baskakov::err_args;
   }
-  if (status == baskakov::ParamStatus::OutOfRange) {
+
+  if (mode != baskakov::mode_stack && mode != baskakov::mode_dynamic) {
     std::cerr << "First parameter is out of range\n";
     return baskakov::err_args;
   }
@@ -117,13 +101,12 @@ int main(int argc, char* argv[])
   }
 
   const int total = rows_num * columns_num;
-  const int mode = std::stoi(argv[1]);
 
   int stack_matrix[baskakov::max_stack_size];
   int* dynamic_matrix = nullptr;
   int* matrix = nullptr;
 
-  if (mode == 1) {
+  if (mode == baskakov::mode_stack) {
     if (total > baskakov::max_stack_size) {
       std::cerr << "Matrix exceeds max stack size\n";
       return baskakov::err_data;
