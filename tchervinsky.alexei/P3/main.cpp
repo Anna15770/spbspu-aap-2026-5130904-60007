@@ -1,47 +1,96 @@
 #include <iostream>
-#include <sstream>
 #include <fstream>
-#include <cstdlib>
-#include <string>
 
-const int ARGC_MIN = 4;
+// 1. Функция для выделения памяти и чтения цельного массива из файла
+int* readMatrix(const char* filename, int rows, int cols) {
+    // Выделяем ОДИН сплошной блок памяти на rows * cols элементов
+    int* matrix = new int[rows * cols];
 
-int main(int argc, char *argv[])
-{
-  if (argc < ARGC_MIN)
-  {
-    std::cerr << "Not enough arguments" << '\n';
-    return 1;
-  }
-  else if (argc > ARGC_MIN)
-  {
-    std::cerr << "Too many arguments" << '\n';
-    return 1;
-  }
+    std::ifstream file(filename);
+    if (!file.is_open()) {
+        std::cerr << "Ошибка: не удалось открыть файл " << filename << std::endl;
+        delete[] matrix; // Освобождаем память в случае ошибки
+        return nullptr;
+    }
 
-  std::stringstream ss_num(argv[1]);
-  int num{0};
-  ss_num >> num;
-  std::streambuf *pbuf = ss_num.rdbuf();
-  const std::streamsize ss_num_avail = pbuf->in_avail();
-  if (!ss_num || ss_num_avail != 0)
-  {
-    std::cerr << "First parameter is not a number\n";
-    return 1;
-  }
+    for (int i = 0; i < rows; i++) {
+        for (int j = 0; j < cols; j++) {
+            // matrix + i * cols + j — вычисляет точный адрес элемента в сплошной ленте памяти
+            file >> *(matrix + i * cols + j);
+        }
+    }
+    file.close();
+    return matrix;
+}
 
-  std::ifstream ifs(argv[2]);
-  if (!ifs)
-  {
-    std::cerr << "Input file not found\n";
-    return 1;
-  }
-  std::string input;
-  if (std::getline(ifs, input))
-  {
-    std::cout << input << '\n';
-  }
-  ifs.close();
+// 2. Функция для вывода цельной матрицы
+void printMatrix(const int* matrix, int rows, int cols) {
+    std::cout << "Матрица:\n";
+    for (int i = 0; i < rows; i++) {
+        for (int j = 0; j < cols; j++) {
+            // Разыменовываем указатель для получения значения
+            std::cout << *(matrix + i * cols + j) << "\t";
+        }
+        std::cout << "\n";
+    }
+}
 
-  return 0;
+// 3. Функция подсчета седловых элементов (Строгое определение: Min в строке, Max в столбце)
+int countSaddleElements(const int* matrix, int rows, int cols) {
+    int count = 0;
+
+    for (int i = 0; i < rows; i++) {
+        for (int j = 0; j < cols; j++) {
+            // Текущий проверяемый элемент
+            int current = *(matrix + i * cols + j);
+            bool isMinInRow = true;
+            bool isMaxInCol = true;
+
+            // Проверка по строке i (меняем индекс столбца k)
+            for (int k = 0; k < cols; k++) {
+                if (*(matrix + i * cols + k) < current) {
+                    isMinInRow = false;
+                    break;
+                }
+            }
+
+            // Проверка по столбцу j (меняем индекс строки k)
+            for (int k = 0; k < rows; k++) {
+                if (*(matrix + k * cols + j) > current) {
+                    isMaxInCol = false;
+                    break;
+                }
+            }
+
+            // Если элемент подошел под строгое критерий
+            if (isMinInRow && isMaxInCol) {
+                count++;
+                std::cout << "Найден седловой элемент: " << current
+                          << " в позиции [" << i << "][" << j << "]\n";
+            }
+        }
+    }
+    return count;
+}
+
+// 4. Функция освобождения памяти (Теперь удаление происходит в одно действие!)
+void freeMatrix(int* matrix) {
+    delete[] matrix;
+}
+
+int main() {
+    const int ROWS = 2;
+    const int COLS = 3;
+
+    // Вызываем функции по цепочке
+    int* matrix = readMatrix("input.txt", ROWS, COLS);
+    if (matrix == nullptr) return 1;
+
+    printMatrix(matrix, ROWS, COLS);
+
+    int totalSaddle = countSaddleElements(matrix, ROWS, COLS);
+    std::cout << "Всего седловых элементов: " << totalSaddle << std::endl;
+
+    freeMatrix(matrix);
+    return 0;
 }
