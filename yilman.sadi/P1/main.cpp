@@ -2,10 +2,8 @@
 #include <iostream>
 #include <limits>
 
-namespace yilman
-{
-  class IncSeq
-  {
+namespace yilman {
+  class IncSeq {
   public:
     void operator()(int a);
     size_t operator()() const;
