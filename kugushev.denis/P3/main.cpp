@@ -12,7 +12,7 @@ int main(int argc, char* argv[])
     return 1;
   }
   char* endptr = nullptr;
-  long num = std::strtol(argv[1], &endptr, 10);
+  const long num = std::strtol(argv[1], &endptr, 10);
   if (*endptr != '\0' || endptr == argv[1]) {
     std::cerr << "First parameter is not a number" << "\n";
     return 1;
@@ -41,9 +41,12 @@ int main(int argc, char* argv[])
     return 2;
   }
 
-  if (rows <= 0 || cols <= 0) {
+  if (rows < 0 || cols < 0) {
     std::cerr << "Invalid matrix dimensions" << "\n";
     return 2;
+  }
+  if (rows == 0 || cols == 0){
+    return 0;
   }
 
   const int max_size = 100;
@@ -67,7 +70,7 @@ int main(int argc, char* argv[])
 
   for (int i = 0; i < rows; ++i) {
     for (int j = 0; j < cols; ++j) {
-      int value;
+      int value = 0;
       if (!(input >> value)) {
         std::cerr << "Invalid data" << "\n";
         if (num == 2) {
@@ -91,7 +94,7 @@ int main(int argc, char* argv[])
       int current_sum = 0;
 
       for (int i = 0; i < rows; ++i) {
-        int j = i - diff;
+        const int j = i - diff;
 
         if (j >= 0 && j < cols) {
           if (num == 1) {
