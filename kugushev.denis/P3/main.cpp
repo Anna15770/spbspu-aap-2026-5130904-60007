@@ -45,7 +45,7 @@ int main(int argc, char* argv[])
     std::cerr << "Invalid matrix dimensions" << "\n";
     return 2;
   }
-  if (rows == 0 || cols == 0){
+  if (rows == 0 || cols == 0) {
     return 0;
   }
 
