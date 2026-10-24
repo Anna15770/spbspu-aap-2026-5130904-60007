@@ -72,10 +72,25 @@ int main(int argc, char* argv[])
   int rows = 0;
   int cols = 0;
 
-  if (!(file >> rows >> cols)
-      || rows < 0 || cols < 0
-      || rows > max_elements || cols > max_elements
-      || (rows != 0 && cols > max_elements / rows))
+  if (!(file >> rows >> cols))
+  {
+    std::cerr << "Error: invalid matrix dimensions\n";
+    return 2;
+  }
+
+  if (rows < 0 || cols < 0)
+  {
+    std::cerr << "Error: invalid matrix dimensions\n";
+    return 2;
+  }
+
+  if (rows > max_elements || cols > max_elements)
+  {
+    std::cerr << "Error: invalid matrix dimensions\n";
+    return 2;
+  }
+
+  if (rows != 0 && cols > max_elements / rows)
   {
     std::cerr << "Error: invalid matrix dimensions\n";
     return 2;
