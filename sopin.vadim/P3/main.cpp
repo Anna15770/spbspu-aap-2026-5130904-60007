@@ -4,7 +4,7 @@
 #include <string>
 
 namespace sopin {
-  void spiral(int* a, std::size_t rows, std::size_t cols)
+  void spiral(int* const a, std::size_t rows, std::size_t cols)
   {
     std::size_t top = 0, bottom = rows, left = 0, right = cols;
     int k = 1;
@@ -45,15 +45,16 @@ int main(int argc, char** argv)
     return 1;
   }
 
+  constexpr std::size_t max_size = 10000;
   std::ifstream in(argv[2]);
   std::size_t rows = 0, cols = 0;
-  if (!(in >> rows >> cols) || (num == "1" && rows * cols > 10000)) {
+  if (!(in >> rows >> cols) || (num == "1" && rows * cols > max_size)) {
     std::cerr << "Invalid matrix\n";
     return 2;
   }
 
-  int fixed[10000] = {};
-  int* a = num == "1" ? fixed : new int[rows * cols];
+  int fixed[max_size] = {};
+  int* const a = num == "1" ? fixed : new int[rows * cols];
   for (std::size_t i = 0; i < rows * cols; ++i) {
     if (!(in >> a[i])) {
       if (a != fixed) {
