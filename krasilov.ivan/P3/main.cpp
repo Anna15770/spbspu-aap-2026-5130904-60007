@@ -7,7 +7,7 @@
 #define ERROR_BAD_DATA 2
 #define FIXED_CAPACITY 10000
 
-namespace surname
+namespace krasilov
 {
   using Elem = long long;
 
@@ -97,7 +97,7 @@ namespace surname
     out << '\n';
   }
 
-  int process(std::istream & in, const char * outName, Elem * data, std::size_t rows, std::size_t cols)
+  int process(std::istream & in, const char * out_name, Elem * data, std::size_t rows, std::size_t cols)
   {
     if (!readElements(in, data, rows * cols))
     {
@@ -106,7 +106,7 @@ namespace surname
     }
     transform(data, rows, cols);
 
-    std::ofstream out(outName);
+    std::ofstream out(out_name);
     if (!out)
     {
       std::cerr << "Cannot open output file" << '\n';
@@ -125,7 +125,7 @@ int main(int argc, char * argv[])
     return ERROR_BAD_ARGS;
   }
 
-  int mode{surname::parseMode(argv[1])};
+  const int mode{krasilov::parseMode(argv[1])};
   if (mode == 0)
   {
     std::cerr << "First parameter must be 1 or 2" << '\n';
@@ -146,9 +146,9 @@ int main(int argc, char * argv[])
     std::cerr << "Incorrect matrix" << '\n';
     return ERROR_BAD_DATA;
   }
-  std::size_t rows{static_cast< std::size_t >(r)};
-  std::size_t cols{static_cast< std::size_t >(c)};
-  std::size_t total{rows * cols};
+  const std::size_t rows{static_cast< std::size_t >(r)};
+  const std::size_t cols{static_cast< std::size_t >(c)};
+  const std::size_t total{rows * cols};
 
   if (mode == 1)
   {
@@ -157,17 +157,17 @@ int main(int argc, char * argv[])
       std::cerr << "Matrix is too large" << '\n';
       return ERROR_BAD_DATA;
     }
-    surname::Elem data[FIXED_CAPACITY] = {};
-    return surname::process(in, argv[3], data, rows, cols);
+    krasilov::Elem data[FIXED_CAPACITY] = {};
+    return krasilov::process(in, argv[3], data, rows, cols);
   }
 
-  surname::Elem * data{new (std::nothrow) surname::Elem[total]};
+  krasilov::Elem * const data{new (std::nothrow) krasilov::Elem[total]};
   if (data == nullptr)
   {
     std::cerr << "Not enough memory" << '\n';
     return ERROR_BAD_DATA;
   }
-  int code{surname::process(in, argv[3], data, rows, cols)};
+  const int code{krasilov::process(in, argv[3], data, rows, cols)};
   delete[] data;
   return code;
 }
