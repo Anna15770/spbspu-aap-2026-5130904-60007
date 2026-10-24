@@ -1,52 +1,80 @@
-#include <iostream>
 #include <cstddef>
+#include <fstream>
+#include <iostream>
+#include <string>
 
 namespace sopin {
-  constexpr int ok = 0;
-  constexpr int err_input = 1;
-  struct Result {
-    std::size_t value;
-    int status;
-  };
-
-  Result countMonDec()
+  void spiral(int* a, std::size_t rows, std::size_t cols)
   {
-    int prev = 0;
-    int next = 0;
-    std::size_t total = 0;
-    std::size_t curr_len = 0;
-    std::size_t max_len = 0;
-
-    while (std::cin >> next && next != 0) {
-      ++total;
-      if (total > 1 && next <= prev) {
-        ++curr_len;
-      } else {
-        curr_len = 1;
+    std::size_t top = 0, bottom = rows, left = 0, right = cols;
+    int k = 1;
+    while (top < bottom && left < right) {
+      for (std::size_t j = left; j < right; ++j) {
+        a[top * cols + j] -= k++;
       }
-      if (curr_len > max_len) {
-        max_len = curr_len;
+      ++top;
+      for (std::size_t i = top; i < bottom; ++i) {
+        a[i * cols + right - 1] -= k++;
       }
-      prev = next;
+      --right;
+      if (top < bottom) {
+        for (std::size_t j = right; j-- > left;) {
+          a[(bottom - 1) * cols + j] -= k++;
+        }
+        --bottom;
+      }
+      if (left < right) {
+        for (std::size_t i = bottom; i-- > top;) {
+          a[i * cols + left] -= k++;
+        }
+        ++left;
+      }
     }
-
-    if (!std::cin) {
-      return {0, err_input};
-    }
-
-    return {max_len, ok};
   }
 }
 
-int main()
+int main(int argc, char** argv)
 {
-  const sopin::Result res = sopin::countMonDec();
-
-  if (res.status == sopin::err_input) {
-    std::cerr << "Invalid input\n";
-    return sopin::err_input;
+  if (argc != 4) {
+    std::cerr << "Wrong number of arguments\n";
+    return 1;
+  }
+  const std::string num = argv[1];
+  if (num != "1" && num != "2") {
+    std::cerr << "First parameter must be 1 or 2\n";
+    return 1;
   }
 
-  std::cout << res.value << "\n";
+  std::ifstream in(argv[2]);
+  std::size_t rows = 0, cols = 0;
+  if (!(in >> rows >> cols) || (num == "1" && rows * cols > 10000)) {
+    std::cerr << "Invalid matrix\n";
+    return 2;
+  }
+
+  int fixed[10000] = {};
+  int* a = num == "1" ? fixed : new int[rows * cols];
+  for (std::size_t i = 0; i < rows * cols; ++i) {
+    if (!(in >> a[i])) {
+      if (a != fixed) {
+        delete[] a;
+      }
+      std::cerr << "Invalid matrix\n";
+      return 2;
+    }
+  }
+
+  sopin::spiral(a, rows, cols);
+
+  std::ofstream out(argv[3]);
+  out << rows << " " << cols;
+  for (std::size_t i = 0; i < rows * cols; ++i) {
+    out << " " << a[i];
+  }
+  out << "\n";
+
+  if (a != fixed) {
+    delete[] a;
+  }
   return 0;
 }
