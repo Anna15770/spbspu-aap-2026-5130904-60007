@@ -4,7 +4,7 @@
 
 constexpr int max_elements = 10000;
 
-void process_matrix(int* a, const int rows, const int cols)
+void processMatrix(int* a, const int rows, const int cols)
 {
   const int count = rows * cols;
   int step = 1;
@@ -104,7 +104,7 @@ int main(int argc, char* argv[])
 
     if (rows > 0 && cols > 0)
     {
-      process_matrix(a, rows, cols);
+      processMatrix(a, rows, cols);
     }
 
     output << rows << ' ' << cols << '\n';
@@ -118,7 +118,7 @@ int main(int argc, char* argv[])
   }
   else
   {
-    int* a = new int[rows * cols];
+    int* const a = new int[rows * cols];
 
     for (int i = 0; i < rows * cols; i++)
     {
@@ -132,7 +132,7 @@ int main(int argc, char* argv[])
 
     if (rows > 0 && cols > 0)
     {
-      process_matrix(a, rows, cols);
+      processMatrix(a, rows, cols);
     }
 
     output << rows << ' ' << cols << '\n';
