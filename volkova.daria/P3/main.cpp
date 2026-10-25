@@ -46,8 +46,8 @@ int main(int argc, char **argv) {
     return 2;
   }
 
-  const long long total =
-      static_cast<long long>(rows) * cols;
+  long long total_ll = static_cast<long long>(rows);
+  const long long total = total_ll * cols;
 
   int stack_arr[kStackCapacity];
   int *dyn_arr = nullptr;
@@ -95,7 +95,8 @@ int main(int argc, char **argv) {
 
       double value = m[r * cols + c];
       if (cnt != 0) {
-        value = static_cast<double>(sum) / cnt;
+        double val_calc = static_cast<double>(sum);
+        value = val_calc / cnt;
       }
 
       out << ' ';
