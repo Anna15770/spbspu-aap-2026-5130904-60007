@@ -59,8 +59,7 @@ int main(int argc, char **argv)
     return 2;
   }
 
-  const long long total =
-      static_cast<long long>(rows) * cols;
+  const long long total = static_cast<long long>(rows) * cols;
 
   int stack_arr[kStackCapacity];
   int *dyn_arr = nullptr;
@@ -117,10 +116,9 @@ int main(int argc, char **argv)
           }
         }
       }
-      const double value =
-          (cnt == 0)
-              ? m[r * cols + c]
-              : static_cast<double>(sum) / cnt;
+      const double value = (cnt == 0)
+                               ? m[r * cols + c]
+                               : static_cast<double>(sum) / cnt;
       out << ' ';
       volkova::printTenths(out, value);
     }
