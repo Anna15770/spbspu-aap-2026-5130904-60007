@@ -6,14 +6,6 @@
 namespace {
 constexpr int kStackCapacity = 10000;
 constexpr double kTenthsScale = 10.0;
-
-long long castToLongLong(int v) {
-  return (long long)v;
-}
-
-double castToDouble(long long v) {
-  return (double)v;
-}
 }
 
 namespace volkova {
@@ -54,7 +46,7 @@ int main(int argc, char **argv) {
     return 2;
   }
 
-  const long long r_ll = castToLongLong(rows);
+  long long r_ll = static_cast<long long>(rows);
   const long long total = r_ll * cols;
 
   int stack_arr[kStackCapacity];
@@ -103,7 +95,7 @@ int main(int argc, char **argv) {
 
       double value = m[r * cols + c];
       if (cnt != 0) {
-        const double sum_d = castToDouble(sum);
+        double sum_d = static_cast<double>(sum);
         value = sum_d / cnt;
       }
 
