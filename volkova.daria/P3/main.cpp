@@ -59,23 +59,25 @@ int main(int argc, char **argv)
     return 2;
   }
 
-  const long long total = static_cast<long long>(rows) * cols;
+  long long total = static_cast<long long>(rows);
+  total *= cols;
+  const long long total_const = total;
 
   int stack_arr[kStackCapacity];
   int *dyn_arr = nullptr;
   int *m = stack_arr;
   if (num == 2)
   {
-    dyn_arr = new int[total];
+    dyn_arr = new int[total_const];
     m = dyn_arr;
   }
-  else if (total > kStackCapacity)
+  else if (total_const > kStackCapacity)
   {
     std::cerr << "Matrix is too large\n";
     return 2;
   }
 
-  for (long long i = 0; i < total; ++i)
+  for (long long i = 0; i < total_const; ++i)
   {
     if (!(in >> m[i]))
     {
@@ -116,9 +118,13 @@ int main(int argc, char **argv)
           }
         }
       }
-      const double value = (cnt == 0)
-                               ? m[r * cols + c]
-                               : static_cast<double>(sum) / cnt;
+
+      double value = m[r * cols + c];
+      if (cnt != 0)
+      {
+        value = static_cast<double>(sum) / cnt;
+      }
+
       out << ' ';
       volkova::printTenths(out, value);
     }
