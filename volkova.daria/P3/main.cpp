@@ -5,26 +5,26 @@
 
 namespace
 {
-  constexpr int kStackCapacity = 10000;
-  constexpr double kTenthsScale = 10.0;
+constexpr int kStackCapacity = 10000;
+constexpr double kTenthsScale = 10.0;
 }
 
 namespace volkova
 {
-  void printTenths(std::ostream &out, double v)
+void printTenths(std::ostream &out, double v)
+{
+  long long t = std::llround(v * kTenthsScale);
+  if (t < 0)
   {
-    long long t = std::llround(v * kTenthsScale);
-    if (t < 0)
-    {
-      out << '-';
-      t = -t;
-    }
-    out << t / 10;
-    if (t % 10 != 0)
-    {
-      out << '.' << t % 10;
-    }
+    out << '-';
+    t = -t;
   }
+  out << t / 10;
+  if (t % 10 != 0)
+  {
+    out << '.' << t % 10;
+  }
+}
 }
 
 int main(int argc, char **argv)
@@ -59,7 +59,8 @@ int main(int argc, char **argv)
     return 2;
   }
 
-  const long long r_ll = static_cast<long long>(rows);
+  const long long r_ll =
+      static_cast<long long>(rows);
   const long long total = r_ll * cols;
 
   int stack_arr[kStackCapacity];
@@ -108,8 +109,8 @@ int main(int argc, char **argv)
           const int nr = r + dr;
           const int nc = c + dc;
           const bool is_self = (dr == 0 && dc == 0);
-          const bool inside = nr >= 0 && nr < rows &&
-                              nc >= 0 && nc < cols;
+          const bool inside = nr >= 0 && nr < rows
+                              && nc >= 0 && nc < cols;
           if (!is_self && inside)
           {
             sum += m[nr * cols + nc];
@@ -121,7 +122,8 @@ int main(int argc, char **argv)
       double value = m[r * cols + c];
       if (cnt != 0)
       {
-        const double sum_d = static_cast<double>(sum);
+        const double sum_d =
+            static_cast<double>(sum);
         value = sum_d / cnt;
       }
 
