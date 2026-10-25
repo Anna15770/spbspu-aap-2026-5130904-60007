@@ -59,7 +59,8 @@ int main(int argc, char **argv)
     return 2;
   }
 
-  const long long total = (long long)rows * cols;
+  const long long r_ll = static_cast<long long>(rows);
+  const long long total = r_ll * cols;
 
   int stack_arr[kStackCapacity];
   int *dyn_arr = nullptr;
@@ -109,7 +110,6 @@ int main(int argc, char **argv)
           const bool is_self = (dr == 0 && dc == 0);
           const bool inside = nr >= 0 && nr < rows &&
                               nc >= 0 && nc < cols;
-
           if (!is_self && inside)
           {
             sum += m[nr * cols + nc];
@@ -121,9 +121,9 @@ int main(int argc, char **argv)
       double value = m[r * cols + c];
       if (cnt != 0)
       {
-        value = (double)sum / cnt;
+        const double sum_d = static_cast<double>(sum);
+        value = sum_d / cnt;
       }
-
 
       out << ' ';
       volkova::printTenths(out, value);
