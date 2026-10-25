@@ -13,8 +13,7 @@ int main(int argc, char* argv[])
   std::cout << "Input: " << argv[2] << '\n';
   std::cout << "Output: " << argv[3] << '\n';
 
-  if (std::strcmp(argv[1], "1") != 0 &&
-    std::strcmp(argv[1], "2") != 0)
+  if (std::strcmp(argv[1], "1") != 0 && std::strcmp(argv[1], "2") != 0)
   {
     std::cerr << "Invalid mode\n";
     return 1;
@@ -31,8 +30,9 @@ int main(int argc, char* argv[])
   }
   std::cout << rows << " " << cols << '\n';
 
-  int fixedArr[10000];
-  int* arr = fixedArr;
+  const int capacity = 10000;
+  int fixed_arr[capacity];
+  int* arr = fixed_arr;
   if (std::strcmp(argv[1], "2") == 0)
   {
     arr = new int[rows * cols];
@@ -58,7 +58,7 @@ int main(int argc, char* argv[])
     }
   }
   int subtrahend = 1;
-  for (; (bottom >= top) && (right >= left); )
+  for (; (bottom >= top) && (right >= left);)
   {
     for (int i = bottom; i >= top; --i)
     {
