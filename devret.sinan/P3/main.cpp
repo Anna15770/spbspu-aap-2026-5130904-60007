@@ -1,143 +1,128 @@
 #include <cstddef>
+#include <cstdlib>
 #include <fstream>
 #include <iostream>
-#include <limits>
 #include <new>
 
-namespace devret {
-const std::size_t MAX_SIZE = 10000;
+namespace devret
+{
+  const size_t max_static_size = 10000;
 
-bool read_elements(std::ifstream &input, int *matrix, std::size_t total) {
-  for (std::size_t i = 0; i < total; ++i) {
-    if (!(input >> matrix[i])) {
-      return false;
-    }
-  }
-
-  char extra = '\0';
-  if (input >> extra) {
-    return false;
-  }
-
-  return input.eof();
-}
-
-int count_rows(const int *matrix, int rows, int cols) {
-  int count = 0;
-
-  for (int i = 0; i < rows; ++i) {
-    bool valid = true;
-    const std::size_t start =
-        static_cast<std::size_t>(i) * static_cast<std::size_t>(cols);
-
-    for (int j = 1; j < cols; ++j) {
-      const std::size_t index = start + static_cast<std::size_t>(j);
-
-      if (matrix[index] == matrix[index - 1]) {
-        valid = false;
-        break;
+  bool readElements(std::istream &in, int *data, size_t count)
+  {
+    for (size_t i = 0; i < count; ++i)
+    {
+      if (!(in >> data[i]))
+      {
+        return false;
       }
     }
+    return true;
+  }
 
-    if (valid) {
-      ++count;
+  size_t countRows(const int *data, size_t rows, size_t cols)
+  {
+    size_t result = 0;
+    for (size_t i = 0; i < rows; ++i)
+    {
+      bool has_equal = false;
+      for (size_t j = 1; j < cols && !has_equal; ++j)
+      {
+        has_equal = (data[i * cols + j] == data[i * cols + j - 1]);
+      }
+      if (!has_equal)
+      {
+        ++result;
+      }
     }
+    return result;
   }
 
-  return count;
+  bool writeResult(const char *path, size_t result)
+  {
+    std::ofstream out(path);
+    out << result << "\n";
+    return static_cast< bool >(out);
+  }
 }
 
-int write_result(const char *output_name, int result) {
-  std::ofstream output(output_name);
-
-  if (!output) {
-    std::cerr << "Error: cannot open output file\n";
-    return 2;
-  }
-
-  output << result << '\n';
-  output.close();
-
-  if (!output) {
-    std::cerr << "Error: cannot write output file\n";
-    return 2;
-  }
-
-  return 0;
-}
-} // namespace devret
-
-int main(int argc, char *argv[]) {
-  if (argc != 4) {
-    std::cerr << "Error: usage: lab <1|2> <input> <output>\n";
+int main(int argc, char **argv)
+{
+  if (argc != 4)
+  {
+    std::cerr << "Usage: " << argv[0] << " num input output\n";
     return 1;
   }
 
-  if ((argv[1][0] != '1' && argv[1][0] != '2') || argv[1][1] != '\0') {
-    std::cerr << "Error: first argument must be 1 or 2\n";
+  char *end = nullptr;
+  const long mode = std::strtol(argv[1], &end, 10);
+  if (end == argv[1] || *end != '\0' || (mode != 1 && mode != 2))
+  {
+    std::cerr << "Error: num must be 1 or 2\n";
     return 1;
   }
 
-  const int mode = argv[1][0] - '0';
   std::ifstream input(argv[2]);
-
-  if (!input) {
+  if (!input)
+  {
     std::cerr << "Error: cannot open input file\n";
     return 2;
   }
 
-  int rows = 0;
-  int cols = 0;
-
-  if (!(input >> rows >> cols) || rows < 0 || cols < 0) {
-    std::cerr << "Error: invalid input dimensions\n";
+  long long rows = 0;
+  long long cols = 0;
+  if (!(input >> rows >> cols) || rows < 0 || cols < 0)
+  {
+    std::cerr << "Error: invalid matrix size\n";
     return 2;
   }
 
-  const std::size_t row_count = static_cast<std::size_t>(rows);
-  const std::size_t col_count = static_cast<std::size_t>(cols);
-  const std::size_t max_elements =
-      std::numeric_limits<std::size_t>::max() / sizeof(int);
-
-  if (row_count != 0 && col_count > max_elements / row_count) {
+  const size_t r = static_cast< size_t >(rows);
+  const size_t c = static_cast< size_t >(cols);
+  if (r != 0 && c > devret::max_static_size / r && mode == 1)
+  {
     std::cerr << "Error: matrix is too large\n";
     return 2;
   }
+  const size_t count = r * c;
 
-  const std::size_t total = row_count * col_count;
-
-  if (mode == 1 && total > devret::MAX_SIZE) {
-    std::cerr << "Error: matrix is too large\n";
-    return 2;
-  }
-
-  if (mode == 1) {
-    int matrix[devret::MAX_SIZE];
-
-    if (!devret::read_elements(input, matrix, total)) {
-      std::cerr << "Error: invalid input matrix\n";
+  size_t result = 0;
+  if (mode == 1)
+  {
+    int matrix[devret::max_static_size] = {};
+    if (!devret::readElements(input, matrix, count))
+    {
+      std::cerr << "Error: invalid matrix elements\n";
       return 2;
     }
-
-    const int result = devret::count_rows(matrix, rows, cols);
-    return devret::write_result(argv[3], result);
+    result = devret::countRows(matrix, r, c);
   }
-
-  int *const matrix = total == 0 ? nullptr : new (std::nothrow) int[total];
-
-  if (total != 0 && matrix == nullptr) {
-    std::cerr << "Error: memory allocation failed\n";
-    return 2;
-  }
-
-  if (!devret::read_elements(input, matrix, total)) {
+  else
+  {
+    int *matrix = nullptr;
+    try
+    {
+      matrix = new int[count];
+    }
+    catch (const std::bad_alloc &)
+    {
+      std::cerr << "Error: not enough memory\n";
+      return 2;
+    }
+    if (!devret::readElements(input, matrix, count))
+    {
+      delete[] matrix;
+      std::cerr << "Error: invalid matrix elements\n";
+      return 2;
+    }
+    result = devret::countRows(matrix, r, c);
     delete[] matrix;
-    std::cerr << "Error: invalid input matrix\n";
-    return 2;
   }
 
-  const int result = devret::count_rows(matrix, rows, cols);
-  delete[] matrix;
-
-  return devret::write_result(argv[3], result);
+  if (!devret::writeResult(argv[3], result))
+  {
+    std::cerr << "Error: cannot write output file\n";
+    return 2;
+  }
+  return 0;
 }
