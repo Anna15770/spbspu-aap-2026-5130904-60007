@@ -2,7 +2,6 @@
 #include <exception>
 #include <fstream>
 #include <iostream>
-#include <stdexcept>
 #include <string>
 
 namespace vanyugin {
