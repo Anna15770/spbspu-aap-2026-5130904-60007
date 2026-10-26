@@ -24,8 +24,8 @@ bool readMatrix(const char *filename, int &rows, int &cols, int *data,
       return false;
   }
 
-  int extra;
-  if (fin >> extra) {
+  fin >> std::ws;
+  if (fin.peek() != EOF) {
     return false;
   }
 
@@ -39,22 +39,22 @@ int findColumn(const int *data, int rows, int cols) {
   int bestCol = 1;
   int bestLen = 0;
 
-  for (int j = 0; j < cols; j++) {
+  for (int i = 0; i < cols; i++) {
     int curLen = 1;
-    int maxInCol = 1;
+    int maxlnCol = 1;
     for (int i = 1; i < rows; i++) {
       int cur = data[i * cols + j];
       int prev = data[(i - 1) * cols + j];
       if (cur == prev) {
         curLen++;
-        if (curLen > maxInCol)
-          maxInCol = curLen;
+        if (curLen > maxlnCol)
+          maxlnCol = curLen;
       } else {
         curLen = 1;
       }
     }
-    if (maxInCol > bestLen) {
-      bestLen = maxInCol;
+    if (maxlnCol > bestLen) {
+      bestLen = maxlnCol;
       bestCol = j + 1;
     }
   }
@@ -96,22 +96,22 @@ int main(int argc, char *argv[]) {
     int result = findColumn(data, rows, cols);
 
     std::ofstream fout(outputFile);
-    fout << rows << " " << cols << " " << result << "\n";
-  } else {
-    std::ifstream probe(inputFile);
-    if (!probe.is_open()) {
-      std::cerr << "Error: cannot open file\n";
+    if (!fout.is_open()) {
+      std::cerr << "Error: cannot open output file\n";
       return 2;
     }
+    fout << rows << " " << cols << " " << result << "\n";
+  } else {
 
     static int temp[1000000];
+
     if (!readMatrix(inputFile, rows, cols, temp, 1000000)) {
       std::cerr << "Error: cannot read matrix\n";
       return 2;
     }
 
     int total = rows * cols;
-    int *data = 0;
+    int *data = nullptr;
     if (total > 0) {
       data = new int[total];
     }
@@ -123,9 +123,15 @@ int main(int argc, char *argv[]) {
     int result = findColumn(data, rows, cols);
 
     std::ofstream fout(outputFile);
+    if (!fout.is_open()) {
+      std::cerr << "Error: cannot open output file\n";
+      if (data != nullptr)
+        delete[] data;
+      return 2;
+    }
     fout << rows << " " << cols << " " << result << "\n";
 
-    if (data != 0) {
+    if (data != nullptr) {
       delete[] data;
     }
   }
