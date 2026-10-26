@@ -1,10 +1,12 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <new>
 
 namespace mukhametdinov {
 
-int countColsWithoutConsecutive(const int* matrix, int rows, int cols) {
+int countColsWithoutConsecutive(const int* matrix, int rows, int cols)
+{
     int count = 0;
     for (int j = 0; j < cols; ++j) {
         bool has_consecutive = false;
@@ -21,7 +23,8 @@ int countColsWithoutConsecutive(const int* matrix, int rows, int cols) {
     return count;
 }
 
-int run(int argc, char* argv[]) {
+int run(int argc, char* argv[])
+{
     const int argc_count = 4;
     const int max_elements = 10000;
 
@@ -34,12 +37,12 @@ int run(int argc, char* argv[]) {
         return 1;
     }
 
-    std::string mode_str = argv[1];
+    const std::string mode_str = argv[1];
     if (mode_str != "1" && mode_str != "2") {
         std::cerr << "First parameter is not a number\n";
         return 1;
     }
-    int num = std::stoi(mode_str);
+    const int num = std::stoi(mode_str);
 
     std::ifstream input(argv[2]);
     if (!input) {
@@ -47,7 +50,8 @@ int run(int argc, char* argv[]) {
         return 1;
     }
 
-    int rows = 0, cols = 0;
+    int rows = 0;
+    int cols = 0;
     input >> rows >> cols;
     if (!input) {
         std::cerr << "Invalid input file format\n";
@@ -84,22 +88,28 @@ int run(int argc, char* argv[]) {
         input >> matrix[i];
         if (!input) {
             std::cerr << "Invalid input file format\n";
-            if (num == 2) delete[] matrix;
+            if (num == 2) {
+                delete[] matrix;
+            }
             return 2;
         }
     }
 
-    char trailing;
+    char trailing = '\0';
     if (input >> trailing) {
         std::cerr << "Extra data in input file\n";
-        if (num == 2) delete[] matrix;
+        if (num == 2) {
+            delete[] matrix;
+        }
         return 2;
     }
 
     std::ofstream output(argv[3]);
     if (!output) {
         std::cerr << "Failed to open output file\n";
-        if (num == 2) delete[] matrix;
+        if (num == 2) {
+            delete[] matrix;
+        }
         return 1;
     }
 
@@ -112,8 +122,9 @@ int run(int argc, char* argv[]) {
     return 0;
 }
 
-}
+} // namespace mukhametdinov
 
-int main(int argc, char* argv[]) {
+int main(int argc, char* argv[])
+{
     return mukhametdinov::run(argc, argv);
 }
