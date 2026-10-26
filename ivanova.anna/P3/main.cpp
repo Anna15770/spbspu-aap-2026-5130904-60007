@@ -9,6 +9,8 @@ bool readMatrix(const char *filename, int &rows, int &cols, int *data,
     return false;
 
   fin >> rows >> cols;
+  if (!fin)
+    return false;
 
   if (rows < 0 || cols < 0)
     return false;
