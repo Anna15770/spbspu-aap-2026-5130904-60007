@@ -20,7 +20,7 @@ namespace vanyugin {
       return 0;
     }
 
-    int min_sum = min; 
+    int min_sum = min;
     bool found = false;
 
     for (int k = 0; k < rows_num + columns_num - 1; ++k)
@@ -36,11 +36,11 @@ namespace vanyugin {
       for (int r = 0; r < rows_num; ++r)
       {
         int c = k - r;
-            
+
         if (c >= 0 && c < columns_num)
         {
           int linear_index = r * columns_num + c;
-                
+
           cnt += matrix[linear_index];
           has_elements = true;
         }
@@ -118,7 +118,7 @@ int main(int argc, char* argv[])
     std::cerr << "Invalid matrix dimensions\n";
     return vanyugin::err_data;
   }
-  
+
   std::ofstream out(argv[3]);
   if (!out.is_open())
   {
@@ -161,4 +161,4 @@ int main(int argc, char* argv[])
 
   out << minsum << "\n";
   return 0;
-} 
+}
