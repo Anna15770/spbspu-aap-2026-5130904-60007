@@ -137,8 +137,7 @@ int main(int argc, char *argv[])
     }
   }
 
-  const int minsum =
-      vanyugin::minsumparalsecdiag(matrix, rows_num, columns_num);
+  const int minsum = vanyugin::minsumparalsecdiag(matrix, rows_num, columns_num);
   delete[] dynamic_matrix;
 
   out << minsum << "\n";
