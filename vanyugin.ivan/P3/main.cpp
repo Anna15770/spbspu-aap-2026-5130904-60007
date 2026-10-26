@@ -6,51 +6,50 @@
 
 namespace vanyugin {
 
-const int expected_argc = 4;
-const int err_args = 1;
-const int err_data = 2;
-const int mode_stack = 1;
-const int mode_dynamic = 2;
-const int max_stack_size = 10000;
-const int min = 2147483647;
+  const int expected_argc = 4;
+  const int err_args = 1;
+  const int err_data = 2;
+  const int mode_stack = 1;
+  const int mode_dynamic = 2;
+  const int max_stack_size = 10000;
+  const int min = 2147483647;
 
-int minsumparalsecdiag(const int *matrix, int rows_num, int columns_num)
-{
-
-  if (rows_num <= 0 || columns_num <= 0) {
-    return 0;
-  }
-
-  int min_sum = min;
-  bool found = false;
-
-  for (int k = 0; k < rows_num + columns_num - 1; ++k) {
-    if (rows_num == columns_num && k == rows_num - 1) {
-      continue;
+  int minsumparalsecdiag(const int *matrix, int rows_num, int columns_num)
+  {
+    if (rows_num <= 0 || columns_num <= 0) {
+      return 0;
     }
 
-    int cnt = 0;
-    bool has_elements = false;
+    int min_sum = min;
+    bool found = false;
 
-    for (int r = 0; r < rows_num; ++r) {
-      const int c = k - r;
+    for (int k = 0; k < rows_num + columns_num - 1; ++k) {
+      if (rows_num == columns_num && k == rows_num - 1) {
+        continue;
+      }
 
-      if (c >= 0 && c < columns_num) {
-        const int linear_index = r * columns_num + c;
+      int cnt = 0;
+      bool has_elements = false;
 
-        cnt += matrix[linear_index];
-        has_elements = true;
+      for (int r = 0; r < rows_num; ++r) {
+        const int c = k - r;
+
+        if (c >= 0 && c < columns_num) {
+          const int linear_index = r * columns_num + c;
+
+          cnt += matrix[linear_index];
+          has_elements = true;
+        }
+      }
+
+      if (has_elements && cnt < min_sum) {
+        min_sum = cnt;
+        found = true;
       }
     }
 
-    if (has_elements && cnt < min_sum) {
-      min_sum = cnt;
-      found = true;
-    }
+    return found ? min_sum : 0;
   }
-
-  return found ? min_sum : 0;
-}
 
 }
 
