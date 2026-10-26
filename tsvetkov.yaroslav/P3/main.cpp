@@ -17,7 +17,7 @@ int main(int argc, char* argv[])
     return 2;
   }
   char* end = nullptr;
-  long value = std::strtol(argv[1], &end, 10);
+  const long value = std::strtol(argv[1], &end, 10);
   if (end == argv[1] || *end != '\0')
   {
     std::cerr << "First parameter is not a number\n";
@@ -29,13 +29,14 @@ int main(int argc, char* argv[])
     return 2;
   }
   std::ifstream file(argv[2]);
-  int rows, cols;
+  int rows = 0;
+  int cols = 0;
   if (!(file >> rows >> cols) || rows < 0 || cols < 0)
   {
     std::cerr << "Incorrect matrix dimensions\n";
     return 2;
   }
-  int x;
+  int x = 0;
   int count = 0;
   while (file >> x)
   {
@@ -66,7 +67,7 @@ int main(int argc, char* argv[])
     {
       for (int j = 0; j < cols; ++j)
       {
-        int layer = std::min({i, rows - 1 - i, j, cols - 1 - j}) + 1;
+        const int layer = std::min({i, rows - 1 - i, j, cols - 1 - j}) + 1;
         sm[i][j] += layer;
       }
     }
@@ -83,7 +84,7 @@ int main(int argc, char* argv[])
   else if (value == 2)
   {
     std::ifstream file(argv[2]);
-    int** sm = new int*[rows];
+    int** const sm = new int*[rows];
     for (int i = 0; i < rows; ++i)
     {
       sm[i] = new int[cols];
@@ -100,7 +101,7 @@ int main(int argc, char* argv[])
     {
       for (int j = 0; j < cols; ++j)
       {
-        int layer = std::min({i, rows - 1 - i, j, cols - 1 - j}) + 1;
+        const int layer = std::min({i, rows - 1 - i, j, cols - 1 - j}) + 1;
         sm[i][j] += layer;
       }
     }
