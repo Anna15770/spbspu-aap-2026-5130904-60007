@@ -24,11 +24,6 @@ bool readMatrix(const char *filename, int &rows, int &cols, int *data,
       return false;
   }
 
-  fin >> std::ws;
-  if (fin.peek() != EOF) {
-    return false;
-  }
-
   return true;
 }
 
