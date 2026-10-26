@@ -52,7 +52,7 @@ int minsumparalsecdiag(const int *matrix, int rows_num, int columns_num) {
   return found ? min_sum : 0;
 }
 
-}
+} // namespace vanyugin
 
 int main(int argc, char *argv[]) {
   if (argc < vanyugin::expected_argc) {
@@ -142,4 +142,3 @@ int main(int argc, char *argv[]) {
   out << minsum << "\n";
   return 0;
 }
-
