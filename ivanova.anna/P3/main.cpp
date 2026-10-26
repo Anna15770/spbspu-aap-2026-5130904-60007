@@ -66,7 +66,7 @@ bool readMatrix(const char* filename, int& rows, int& cols, int* data, int maxSi
     if (!toNumber(tokens[0], r)) return false;
     if (!toNumber(tokens[1], c)) return false;
     if (r < 0 || c < 0) return false;
-    if (r * c >static_cast<long long>(maxSize) return false;
+    if (r * c >static_cast<long long>(maxSize)) return false;
 
     rows = static_cast<int>(r);
     cols = static_cast<int>(c);
