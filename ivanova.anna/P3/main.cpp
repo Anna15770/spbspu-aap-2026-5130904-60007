@@ -39,7 +39,7 @@ int findColumn(const int *data, int rows, int cols) {
   int bestCol = 1;
   int bestLen = 0;
 
-  for (int j = 0; i < cols; i++) {
+  for (int j = 0; j < cols; j++) {
     int curLen = 1;
     int maxlnCol = 1;
     for (int i = 1; i < rows; i++) {
