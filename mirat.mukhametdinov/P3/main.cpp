@@ -3,9 +3,11 @@
 #include <new>
 #include <string>
 
-namespace mukhametdinov {
+namespace mukhametdinov
+{
 
-int countColsWithoutConsecutive(const int *matrix, int rows, int cols) {
+int countColsWithoutConsecutive(const int* matrix, int rows, int cols)
+{
   int count = 0;
   for (int j = 0; j < cols; ++j) {
     bool has_consecutive = false;
@@ -22,7 +24,8 @@ int countColsWithoutConsecutive(const int *matrix, int rows, int cols) {
   return count;
 }
 
-int run(int argc, char *argv[]) {
+int run(int argc, char* argv[])
+{
   const int argc_count = 4;
   const int max_elements = 10000;
 
@@ -66,7 +69,7 @@ int run(int argc, char *argv[]) {
   }
 
   int fixed[max_elements];
-  int *matrix = nullptr;
+  int* matrix = nullptr;
 
   if (num == 1) {
     if (rows * cols > max_elements) {
@@ -120,6 +123,9 @@ int run(int argc, char *argv[]) {
   return 0;
 }
 
-} // namespace mukhametdinov
+}
 
-int main(int argc, char *argv[]) { return mukhametdinov::run(argc, argv); }
+int main(int argc, char* argv[])
+{
+  return mukhametdinov::run(argc, argv);
+}
