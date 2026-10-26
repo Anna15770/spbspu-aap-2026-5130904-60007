@@ -46,7 +46,7 @@ bool readMatrix(const char* filename, int& rows, int& cols, int* data, int maxSi
 
     static char buffer[1 << 20];
     fin.read(buffer, sizeof(buffer) - 1);
-    int n = (int)fin.gcount();
+    int n = static_cast<int>(fin.gcount());
     buffer[n] = '\0';
     fin.close();
 
@@ -58,7 +58,7 @@ bool readMatrix(const char* filename, int& rows, int& cols, int* data, int maxSi
         tokenCount++;
         while (*p != '\0' && *p != ' ' && *p != '\n' && *p != '\r' && *p != '\t') p++;
         if (*p != '\0') { *p = '\0'; p++; }
-    }
+    }
 
     if (tokenCount < 2) return false;
 
@@ -66,10 +66,10 @@ bool readMatrix(const char* filename, int& rows, int& cols, int* data, int maxSi
     if (!toNumber(tokens[0], r)) return false;
     if (!toNumber(tokens[1], c)) return false;
     if (r < 0 || c < 0) return false;
-    if (r * c > (long long)maxSize) return false;
+    if (r * c >static_cast<long long>(maxSize) return false;
 
-    rows = (int)r;
-    cols = (int)c;
+    rows = static_cast<int>(r);
+    cols = static_cast<int>(c);
 
     int need = rows * cols;
     if (tokenCount - 2 != need) return false;
@@ -77,7 +77,7 @@ bool readMatrix(const char* filename, int& rows, int& cols, int* data, int maxSi
     for (int i = 0; i < need; i++) {
         long long v;
         if (!toNumber(tokens[2 + i], v)) return false;
-        data[i] = (int)v;
+        data[i] = static_cast<int>(v);
     }
     return true;
 }
