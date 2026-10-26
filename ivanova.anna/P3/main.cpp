@@ -20,8 +20,9 @@ bool readMatrix(const char *filename, int &rows, int &cols, int *data,
   int total = rows * cols;
   for (int i = 0; i < total; i++) {
     fin >> data[i];
-    if (fin)
+    if (!fin && !fin.eof()) {
       return false;
+    }
   }
 
   return true;
