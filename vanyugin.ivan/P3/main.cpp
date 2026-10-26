@@ -72,7 +72,7 @@ int main(int argc, char* argv[])
   }
 
   int ter{0};
-  
+
   try
   {
     std::size_t char_num{0};
