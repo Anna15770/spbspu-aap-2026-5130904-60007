@@ -114,7 +114,7 @@ int findColumn(const int* data, int rows, int cols)
 
 int main(int argc, char* argv[])
 {
-    using namespace ivanov;
+    using namespace ivanova;
 
     if (argc != 4) {
         std::cerr << "Error: need 3 arguments\n";
