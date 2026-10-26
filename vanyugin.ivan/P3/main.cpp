@@ -1,4 +1,5 @@
 #include <cstddef>
+#include <exception>
 #include <fstream>
 #include <iostream>
 #include <stdexcept>
