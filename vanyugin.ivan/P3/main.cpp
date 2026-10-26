@@ -15,7 +15,8 @@ const int mode_dynamic = 2;
 const int max_stack_size = 10000;
 const int min = 2147483647;
 
-int minsumparalsecdiag(const int *matrix, int rows_num, int columns_num) {
+int minsumparalsecdiag(const int *matrix, int rows_num, int columns_num)
+{
 
   if (rows_num <= 0 || columns_num <= 0) {
     return 0;
@@ -52,9 +53,10 @@ int minsumparalsecdiag(const int *matrix, int rows_num, int columns_num) {
   return found ? min_sum : 0;
 }
 
-} // namespace vanyugin
+}
 
-int main(int argc, char *argv[]) {
+int main(int argc, char *argv[])
+{
   if (argc < vanyugin::expected_argc) {
     std::cerr << "Not enough arguments\n";
     return vanyugin::err_args;
