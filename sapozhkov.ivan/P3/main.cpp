@@ -50,7 +50,7 @@ int main(int argc, char** argv)
 {
   const int argc_count = 4;
   int num = 0;
-  int max_elemets = 10000;
+  const int max_elemets = 10000;
   if (argc < argc_count)
   {
     std::cerr << "Not enough arguments" << '\n';
