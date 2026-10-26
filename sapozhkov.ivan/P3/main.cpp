@@ -1,10 +1,9 @@
 #include <iostream>
 #include <fstream>
-#include <limits>
 
 namespace sapozhkov
 {
-  int Long_Series(const int* matrix, int rows, int cols)
+  int findLongestSeries(const int* matrix, int rows, int cols)
   {
     int current_series = 1;
     int max_best_in_row = 1;
@@ -127,7 +126,7 @@ int main(int argc, char** argv)
     }
   }
   std::ofstream output(argv[3]);
-  output << sapozhkov::Long_Series(matrix, rows, cols) << '\n';
+  output << sapozhkov::findLongestSeries(matrix, rows, cols) << '\n';
   if (num == 2)
   {
     delete[] matrix;
