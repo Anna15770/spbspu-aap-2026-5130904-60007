@@ -5,9 +5,10 @@
 
 namespace volkova
 {
+  const double tenths_degree = 10.0;
   void printTenths(std::ostream& out, double v)
   {
-    long long t = std::llround(v * 10.0);
+    long long t = std::llround(v * tenths_degree);
     if (t < 0)
     {
       out << '-';
@@ -52,17 +53,18 @@ int main(int argc, char** argv)
     std::cerr << "Input is not a matrix\n";
     return 2;
   }
-  long long total = static_cast<long long>(rows) * cols;
+  long long total = static_cast< long long >(rows) * cols;
 
-  int stackArr[10000];
-  int* dynArr = nullptr;
-  int* m = stackArr;
+  const int stack_capacity = 10000;
+  int stack_arr[stack_capacity];
+  int* dyn_arr = nullptr;
+  int* m = stack_arr;
   if (num == 2)
   {
-    dynArr = new int[total];
-    m = dynArr;
+    dyn_arr = new int[total];
+    m = dyn_arr;
   }
-  else if (total > 10000)
+  else if (total > stack_capacity)
   {
     std::cerr << "Matrix is too large\n";
     return 2;
@@ -73,15 +75,15 @@ int main(int argc, char** argv)
     if (!(in >> m[i]))
     {
       std::cerr << "Input is not a matrix\n";
-      delete[] dynArr;
+      delete[] dyn_arr;
       return 2;
     }
   }
-  char extra;
+  char extra = 0;
   if (in >> extra)
   {
     std::cerr << "Input is not a matrix\n";
-    delete[] dynArr;
+    delete[] dyn_arr;
     return 2;
   }
 
@@ -99,22 +101,22 @@ int main(int argc, char** argv)
         {
           int nr = r + dr;
           int nc = c + dc;
-          bool isSelf = (dr == 0 && dc == 0);
+          bool is_self = (dr == 0 && dc == 0);
           bool inside = nr >= 0 && nr < rows && nc >= 0 && nc < cols;
-          if (!isSelf && inside)
+          if (!is_self && inside)
           {
             sum += m[nr * cols + nc];
             ++cnt;
           }
         }
       }
-      double value = (cnt == 0) ? m[r * cols + c] : static_cast<double>(sum) / cnt;
+      double value = (cnt == 0) ? m[r * cols + c] : static_cast< double >(sum) / cnt;
       out << ' ';
       volkova::printTenths(out, value);
     }
   }
   out << '\n';
 
-  delete[] dynArr;
+  delete[] dyn_arr;
   return 0;
 }
