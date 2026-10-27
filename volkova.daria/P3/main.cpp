@@ -53,7 +53,7 @@ int main(int argc, char** argv)
     std::cerr << "Input is not a matrix\n";
     return 2;
   }
-  long long total = static_cast< long long >(rows) * cols;
+  const long long total = static_cast< long long >(rows) * cols;
 
   const int stack_capacity = 10000;
   int stack_arr[stack_capacity];
@@ -99,10 +99,10 @@ int main(int argc, char** argv)
       {
         for (int dc = -1; dc <= 1; ++dc)
         {
-          int nr = r + dr;
-          int nc = c + dc;
-          bool is_self = (dr == 0 && dc == 0);
-          bool inside = nr >= 0 && nr < rows && nc >= 0 && nc < cols;
+          const int nr = r + dr;
+          const int nc = c + dc;
+          const bool is_self = (dr == 0 && dc == 0);
+          const bool inside = nr >= 0 && nr < rows && nc >= 0 && nc < cols;
           if (!is_self && inside)
           {
             sum += m[nr * cols + nc];
