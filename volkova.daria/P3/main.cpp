@@ -110,7 +110,7 @@ int main(int argc, char** argv)
           }
         }
       }
-      double value = (cnt == 0) ? m[r * cols + c] : static_cast< double >(sum) / cnt;
+      const double value = (cnt == 0) ? m[r * cols + c] : static_cast< double >(sum) / cnt;
       out << ' ';
       volkova::printTenths(out, value);
     }
