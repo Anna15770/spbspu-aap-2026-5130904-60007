@@ -64,7 +64,7 @@ int findColumn(const int *data, int rows, int cols)
       {
         cur_len++;
         if (cur_len > maxln_col)
-        { 
+        {
           maxln_col = cur_len;
         }
       }
@@ -82,7 +82,7 @@ int findColumn(const int *data, int rows, int cols)
   return best_col;
 }
 
-} // namespace ivanova
+}
 
 int main(int argc, char *argv[])
 {
