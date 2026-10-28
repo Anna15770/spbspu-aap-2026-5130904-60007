@@ -23,7 +23,10 @@ bool readMatrix(const char *filename, int &rows, int &cols, int *data,
   int total = rows * cols;
   for (int i = 0; i < total; i++) {
     fin >> data[i];
-    if (!fin && !fin.eof()) {
+    if (fin.fail()) {
+      return false;
+    }
+    if (fin.eof() && i < total - 1) {
       return false;
     }
   }
@@ -32,9 +35,9 @@ bool readMatrix(const char *filename, int &rows, int &cols, int *data,
 }
 
 int findColumn(const int *data, int rows, int cols) {
-  if (rows <= 0 || cols <= 0)
+  if (rows <= 0 || cols <= 0) {
     return 0;
-
+  }
   int bestCol = 1;
   int bestLen = 0;
 
