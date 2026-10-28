@@ -65,7 +65,7 @@ namespace ivanova {
     }
     return best_col;
   }
-
+}
   int main(int argc, char *argv[])
   {
     using namespace ivanova;
