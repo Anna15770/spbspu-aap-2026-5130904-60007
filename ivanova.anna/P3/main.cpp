@@ -1,6 +1,9 @@
 #include <fstream>
 #include <iostream>
 
+const int MAX_STATIC_SIZE = 10000;
+const int MAX_DYNAMIC_SIZE = 1000000;
+
 namespace ivanova {
 bool readMatrix(const char *filename, int &rows, int &cols, int *data,
                 int maxSize) {
