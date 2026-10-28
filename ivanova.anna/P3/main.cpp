@@ -84,8 +84,8 @@ int main(int argc, char *argv[]) {
   int cols = 0;
 
   if (mode == 1) {
-    int data[10000];
-    if (!readMatrix(inputFile, rows, cols, data, 10000)) {
+    int data[MAX_STATIC_SIZE];
+    if (!readMatrix(inputFile, rows, cols, data, MAX_STATIC_SIZE)) {
       std::cerr << "Error: cannot read matrix\n";
       return 2;
     }
@@ -99,9 +99,9 @@ int main(int argc, char *argv[]) {
     fout << rows << " " << cols << " " << result << "\n";
   } else {
 
-    static int temp[1000000];
+    static int temp[MAX_DYNAMIC_SIZE];
 
-    if (!readMatrix(inputFile, rows, cols, temp, 1000000)) {
+    if (!readMatrix(inputFile, rows, cols, temp, MAX_DYNAMIC_SIZE)) {
       std::cerr << "Error: cannot read matrix\n";
       return 2;
     }
