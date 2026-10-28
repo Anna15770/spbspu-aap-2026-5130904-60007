@@ -83,8 +83,8 @@ int main(int argc, char *argv[]) {
   }
   const int mode = argv[1][0] - '0';
 
-  const char *input_file = argv[2];
-  const char *output_file = argv[3];
+  const char *const input_file = argv[2];
+  const char *const output_file = argv[3];
 
   int rows = 0;
   int cols = 0;
