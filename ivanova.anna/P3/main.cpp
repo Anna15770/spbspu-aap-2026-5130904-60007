@@ -107,22 +107,21 @@ int main(int argc, char *argv[])
     }
     fout << rows << " " << cols << " " << result << "\n";
   } else {
-      static int temp[MAX_DYNAMIC_SIZE];
+    static int temp[MAX_DYNAMIC_SIZE];
 
-      if (!readMatrix(input_file, rows, cols, temp, MAX_DYNAMIC_SIZE)) {
-        std::cerr << "Error: cannot read matrix\n";
-        return 2;
-      }
+    if (!readMatrix(input_file, rows, cols, temp, MAX_DYNAMIC_SIZE)) {
+      std::cerr << "Error: cannot read matrix\n";
+      return 2;
+    }
 
-      const int total = rows * cols;
-      int *data = nullptr;
-      if (total > 0) {
-        data = new int[total];
-      }
+    const int total = rows * cols;
+    int *data = nullptr;
+    if (total > 0) {
+      data = new int[total];
+    }
 
-      for (int i = 0; i < total; i++) {
-        data[i] = temp[i];
-      }
+    for (int i = 0; i < total; i++) {
+      data[i] = temp[i];
     }
 
     const int result = findColumn(data, rows, cols);
@@ -141,5 +140,6 @@ int main(int argc, char *argv[])
       delete[] data;
     }
   }
+
   return 0;
 }
