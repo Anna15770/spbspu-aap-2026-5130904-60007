@@ -123,13 +123,13 @@ int main(int argc, char *argv[])
       for (int i = 0; i < total; i++) {
         data[i] = temp[i];
       }
+    }
 
-      const int result = findColumn(data, rows, cols);
+    const int result = findColumn(data, rows, cols);
 
-      std::ofstream fout(output_file);
-      if (!fout.is_open()) {
-        std::cerr << "Error: cannot open output file\n";
-      }
+    std::ofstream fout(output_file);
+    if (!fout.is_open()) {
+      std::cerr << "Error: cannot open output file\n";
       if (data != nullptr) {
         delete[] data;
       }
