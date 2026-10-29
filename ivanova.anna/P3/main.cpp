@@ -66,46 +66,47 @@ namespace ivanova {
     return best_col;
   }
 }
-  int main(int argc, char *argv[])
-  {
-    using namespace ivanova;
 
-    if (argc != 4) {
-      std::cerr << "Error: need 3 arguments\n";
-      return 1;
+int main(int argc, char *argv[])
+{
+  using namespace ivanova;
+
+  if (argc != 4) {
+    std::cerr << "Error: need 3 arguments\n";
+    return 1;
+  }
+
+  if (argv[1][0] != '1' && argv[1][0] != '2') {
+    std::cerr << "Error: first argument must be 1 or 2\n";
+    return 1;
+  }
+  if (argv[1][1] != '\0') {
+    std::cerr << "Error: first argument must be 1 or 2\n";
+    return 1;
+  }
+  const int mode = argv[1][0] - '0';
+
+  const char *const input_file = argv[2];
+  const char *const output_file = argv[3];
+
+  int rows = 0;
+  int cols = 0;
+
+  if (mode == 1) {
+    int data[MAX_STATIC_SIZE];
+    if (!readMatrix(input_file, rows, cols, data, MAX_STATIC_SIZE)) {
+      std::cerr << "Error: cannot read matrix\n";
+      return 2;
     }
+    const int result = findColumn(data, rows, cols);
 
-    if (argv[1][0] != '1' && argv[1][0] != '2') {
-      std::cerr << "Error: first argument must be 1 or 2\n";
-      return 1;
+    std::ofstream fout(output_file);
+    if (!fout.is_open()) {
+      std::cerr << "Error: cannot open output file\n";
+      return 2;
     }
-    if (argv[1][1] != '\0') {
-      std::cerr << "Error: first argument must be 1 or 2\n";
-      return 1;
-    }
-    const int mode = argv[1][0] - '0';
-
-    const char *const input_file = argv[2];
-    const char *const output_file = argv[3];
-
-    int rows = 0;
-    int cols = 0;
-
-    if (mode == 1) {
-      int data[MAX_STATIC_SIZE];
-      if (!readMatrix(input_file, rows, cols, data, MAX_STATIC_SIZE)) {
-        std::cerr << "Error: cannot read matrix\n";
-        return 2;
-      }
-      const int result = findColumn(data, rows, cols);
-
-      std::ofstream fout(output_file);
-      if (!fout.is_open()) {
-        std::cerr << "Error: cannot open output file\n";
-        return 2;
-      }
-      fout << rows << " " << cols << " " << result << "\n";
-    } else {
+    fout << rows << " " << cols << " " << result << "\n";
+  } else {
       static int temp[MAX_DYNAMIC_SIZE];
 
       if (!readMatrix(input_file, rows, cols, temp, MAX_DYNAMIC_SIZE)) {
@@ -128,17 +129,18 @@ namespace ivanova {
       std::ofstream fout(output_file);
       if (!fout.is_open()) {
         std::cerr << "Error: cannot open output file\n";
-        if (data != nullptr) {
-          delete[] data;
-        }
-        return 2;
       }
-      fout << rows << " " << cols << " " << result << "\n";
-
       if (data != nullptr) {
         delete[] data;
       }
+      return 2;
     }
+    fout << rows << " " << cols << " " << result << "\n";
 
-    return 0;
+    if (data != nullptr) {
+      delete[] data;
+    }
   }
+
+  return 0;
+}
